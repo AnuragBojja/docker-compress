@@ -1,9 +1,14 @@
-FROM python:3.14.5
+FROM python:3.14.5-alpine3.22 AS build
 WORKDIR /opt/server
 COPY *.py .
 COPY payment.ini .
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
+
+
+FROM python:3.14.5-alpine3.22
+WORKDIR /opt/server
+COPY --from=build /opt/server /opt/server
 ENV CART_HOST=cart \
     CART_PORT=8080 \
     USER_HOST=user \
@@ -11,4 +16,7 @@ ENV CART_HOST=cart \
     AMQP_HOST=rabbitmq \ 
     AMQP_USER=roboshop \ 
     AMQP_PASS=roboshop123 
+RUN addgroup -S roboshop && adduser -S roboshop -G roboshop
+RUN chowm -R roboshop:roboshop /opt/server
+USER roboshop
 CMD [ "uwsgi", "--ini", "payment.ini" ]
