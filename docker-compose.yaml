@@ -1,0 +1,130 @@
+networks:
+  roboshop:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  mongodb_data:
+  redis_data:
+  rabbitmq_data:
+
+services:
+  mongodb:
+    build : 
+      context : ./mongodb
+      dockerfile: dockerfile
+    image: mongodb:v1
+    container_name: mongodb
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - roboshop
+  
+  catalogue:
+    build:
+      context: ./catalogue
+      dockerfile: dockerfile
+    image: catalogue:v1
+    container_name: catalogue
+    networks:
+      - roboshop
+    depends_on:
+      - mongodb
+  
+  redis:
+    image: redis:7
+    container_name: redis
+    networks:
+      - roboshop
+  
+  user:
+    build:
+      context: ./user
+      dockerfile: dockerfile
+    image: user:v1
+    container_name: user
+    volumes:
+      - redis_data:/data
+    networks:
+      - roboshop
+    depends_on:
+      - mongodb
+      - redis
+    
+  cart:
+    build: 
+      context: ./cart
+      dockerfile: dockerfile
+    image: cart:v1
+    container_name: cart
+    networks:
+      - roboshop
+    depends_on:
+      - redis
+      - catalogue
+  
+  mysql:
+    build: 
+      context: ./mysql
+      dockerfile: dockerfile
+    image: mysql:v1
+    container_name: mysql
+    networks:
+      - roboshop
+    volumes:
+      - mysql_data:/var/lib/mysql
+  
+  shipping:
+    build: 
+      context: ./shipping
+      dockerfile: dockerfile
+    image: shipping:v1
+    container_name: shipping
+    networks:
+      - roboshop
+    depends_on:
+      - mysql
+      - user
+  
+  rabbitmq:
+    image: rabbitmq:3
+    container_name: rabbitmq
+    networks:
+      - roboshop
+    environment:
+      - RABBITMQ_DEFAULT_USER=roboshop
+      - RABBITMQ_DEFAULT_PASS=roboshop123
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+  
+  payment:
+    build:
+      context: ./payment
+      dockerfile: dockerfile
+    image: payment:v1
+    container_name: payment
+    networks:
+      - roboshop
+    depends_on:
+      - rabbitmq
+      - user
+      - cart
+  
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: dockerfile
+    image: frontend:v1
+    container_name: frontend
+    ports:
+      - "80:80"
+    networks:
+      - roboshop
+    depends_on:
+      - catalogue
+      - cart
+      - shipping
+      - payment
+      - user
+
+    

@@ -1,0 +1,11 @@
+FROM node:20
+WORKDIR /opt/server
+COPY *.js .
+COPY *.json .
+RUN npm install
+EXPOSE 8080
+ENV REDIS_HOST=redis \
+    CATALOGUE_HOST=catalogue \
+    CATALOGUE_PORT=8080
+CMD ["server.js"]
+ENTRYPOINT [ "node" ]
