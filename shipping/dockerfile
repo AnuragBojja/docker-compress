@@ -2,14 +2,15 @@ FROM maven:3.5-alpine AS build
 WORKDIR /opt/server
 COPY pom.xml .
 COPY src ./src
-RUN mvn clean package 
+RUN mvn clean package
+RUN mv target/shipping-1.0.jar shipping.jar 
+
 
 
 FROM maven:3.5-alpine
 WORKDIR /opt/server
 COPY --from=build /opt/server /opt/server
 EXPOSE 8080
-RUN mv target/shipping-1.0.jar shipping.jar 
 ENV CART_ENDPOINT=cart:8080 \
     DB_HOST=mysql
 RUN addgroup -S roboshop && adduser -S roboshop -G roboshop
