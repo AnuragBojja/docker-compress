@@ -75,10 +75,9 @@ exec: "uwsgi": executable file not found in $PATH
 A multi-stage build was used — packages were installed in the **build stage**, but only `/opt/server` (app files) was copied to the final stage. The pip-installed packages and the `uwsgi` binary were left behind in the build stage.
 
 ### Fix
-Explicitly copy site-packages and the uwsgi binary from the build stage:
+Explicitly copy /usr/local from the build stage:
 ```dockerfile
-COPY --from=build /usr/local/lib/python3.14/site-packages /usr/local/lib/python3.14/site-packages
-COPY --from=build /usr/local/bin/uwsgi /usr/local/bin/uwsgi
+COPY --from=build /usr/local /usr/local
 ```
 
 ---
