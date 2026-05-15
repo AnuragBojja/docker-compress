@@ -22,4 +22,5 @@ ENV CART_HOST=cart \
 RUN addgroup -S -g 1001 roboshop && adduser -S -u 1001 roboshop -G roboshop
 RUN chown -R roboshop:roboshop /opt/server
 USER roboshop
-CMD [ "uwsgi", "--ini", "payment.ini" ]
+CMD [ "--ini", "payment.ini" ]
+ENTRYPOINT [ "uwsgi" ]

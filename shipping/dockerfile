@@ -16,4 +16,5 @@ ENV CART_ENDPOINT=cart:8080 \
 RUN addgroup -S roboshop && adduser -S roboshop -G roboshop
 RUN chown -R roboshop:roboshop /opt/server
 USER roboshop
-CMD ["java", "-jar", "shipping.jar"]
+CMD ["-jar", "shipping.jar"]
+ENTRYPOINT [ "java" ]
