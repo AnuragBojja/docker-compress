@@ -3,6 +3,7 @@ WORKDIR /opt/server
 COPY *.py .
 COPY payment.ini .
 COPY requirements.txt .
+RUN apk add --no-cache gcc python3-dev
 RUN pip3 install -r requirements.txt
 
 
@@ -17,6 +18,6 @@ ENV CART_HOST=cart \
     AMQP_USER=roboshop \ 
     AMQP_PASS=roboshop123 
 RUN addgroup -S roboshop && adduser -S roboshop -G roboshop
-RUN chowm -R roboshop:roboshop /opt/server
+RUN chown -R roboshop:roboshop /opt/server
 USER roboshop
 CMD [ "uwsgi", "--ini", "payment.ini" ]
