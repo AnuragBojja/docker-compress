@@ -10,8 +10,7 @@ RUN pip3 install -r requirements.txt
 FROM python:3.14-alpine3.22
 WORKDIR /opt/server
 COPY --from=build /opt/server /opt/server
-COPY --from=build /usr/local/lib/python3.14/site-packages /usr/local/lib/python3.14/site-packages
-COPY --from=build /usr/local/bin/uwsgi /usr/local/bin/uwsgi
+COPY --from=build /usr/local/ /usr/local/
 ENV CART_HOST=cart \
     CART_PORT=8080 \
     USER_HOST=user \
