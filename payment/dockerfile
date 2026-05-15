@@ -3,7 +3,7 @@ WORKDIR /opt/server
 COPY *.py .
 COPY payment.ini .
 COPY requirements.txt .
-RUN apk add --no-cache gcc python3-dev musl-dev
+RUN apk add --no-cache gcc python3-dev musl-dev linux-headers
 RUN pip3 install -r requirements.txt
 
 
