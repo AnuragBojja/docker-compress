@@ -18,9 +18,8 @@ ENV CART_HOST=cart \
     AMQP_USER=roboshop \ 
     AMQP_PASS=roboshop123 
 RUN addgroup -S -g 1001 roboshop && adduser -S -u 1001 roboshop -G roboshop
-COPY *.py .
-COPY payment.ini .
-RUN chown -R roboshop:roboshop /opt/server
+COPY --chown=roboshop:roboshop *.py .
+COPY --chown=roboshop:roboshop payment.ini .
 USER roboshop
 CMD [ "--ini", "payment.ini" ]
 ENTRYPOINT [ "uwsgi" ]
