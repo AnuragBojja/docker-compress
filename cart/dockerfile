@@ -11,8 +11,8 @@ EXPOSE 8080
 ENV REDIS_HOST=redis \
     CATALOGUE_HOST=catalogue \
     CATALOGUE_PORT=8080
-RUN addgroup -S roboshop && adduser -S roboshop -G roboshop
-RUN chown -R roboshop:roboshop /opt/server
+RUN addgroup -S roboshop && adduser -S roboshop -G roboshop && \
+    chown -R roboshop:roboshop /opt/server
 USER roboshop
 CMD ["server.js"]
 ENTRYPOINT [ "node" ]

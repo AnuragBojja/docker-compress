@@ -1,17 +1,14 @@
 FROM python:3.14-alpine3.22 AS build
 WORKDIR /opt/server
-COPY *.py .
-COPY payment.ini .
-COPY requirements.txt .
 RUN apk add --no-cache gcc python3-dev musl-dev linux-headers
-RUN pip3 install -r requirements.txt
+COPY requirements.txt .
+RUN pip3 --target /requirements install -r requirements.txt
 
 
 FROM python:3.14-alpine3.22
-WORKDIR /opt/server
-COPY --from=build /opt/server /opt/server
-COPY --from=build /usr/local/ /usr/local/
 EXPOSE 8080
+WORKDIR /opt/server
+COPY --from=build /requirements /usr/local/
 ENV CART_HOST=cart \
     CART_PORT=8080 \
     USER_HOST=user \
@@ -20,6 +17,8 @@ ENV CART_HOST=cart \
     AMQP_USER=roboshop \ 
     AMQP_PASS=roboshop123 
 RUN addgroup -S -g 1001 roboshop && adduser -S -u 1001 roboshop -G roboshop
+COPY *.py .
+COPY payment.ini .
 RUN chown -R roboshop:roboshop /opt/server
 USER roboshop
 CMD [ "--ini", "payment.ini" ]
