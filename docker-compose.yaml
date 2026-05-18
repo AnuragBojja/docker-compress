@@ -13,7 +13,7 @@ services:
     build : 
       context : ./mongodb
       dockerfile: dockerfile
-    image: anurag/mongodb:v1
+    image: anuragbojja/mongodb:v1
     container_name: mongodb
     volumes:
       - mongodb_data:/data/db
@@ -24,7 +24,7 @@ services:
     build:
       context: ./catalogue
       dockerfile: dockerfile
-    image: anurag/catalogue:v1
+    image: anuragbojja/catalogue:v1
     container_name: catalogue
     networks:
       - roboshop
@@ -43,7 +43,7 @@ services:
     build:
       context: ./user
       dockerfile: dockerfile
-    image: anurag/user:v1
+    image: anuragbojja/user:v1
     container_name: user
     networks:
       - roboshop
@@ -55,7 +55,7 @@ services:
     build: 
       context: ./cart
       dockerfile: dockerfile
-    image: anurag/cart:v1
+    image: anuragbojja/cart:v1
     container_name: cart
     networks:
       - roboshop
@@ -67,7 +67,7 @@ services:
     build: 
       context: ./mysql
       dockerfile: dockerfile
-    image: anurag/mysql:v1
+    image: anuragbojja/mysql:v1
     container_name: mysql
     networks:
       - roboshop
@@ -78,7 +78,7 @@ services:
     build: 
       context: ./shipping
       dockerfile: dockerfile
-    image: sanurag/hipping:v1
+    image: anuragbojja/shipping:v1
     container_name: shipping
     networks:
       - roboshop
@@ -101,7 +101,7 @@ services:
     build:
       context: ./payment
       dockerfile: dockerfile
-    image: anurag/payment:v1
+    image: anuragbojja/payment:v1
     container_name: payment
     networks:
       - roboshop
@@ -114,7 +114,7 @@ services:
     build:
       context: ./frontend
       dockerfile: dockerfile
-    image: anurag/frontend:v1
+    image: anuragbojja/frontend:v1
     container_name: frontend
     ports:
       - "80:80"
