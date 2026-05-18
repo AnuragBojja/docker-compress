@@ -2,7 +2,7 @@ FROM python:3.14-alpine3.22 AS build
 WORKDIR /opt/server
 RUN apk add --no-cache gcc python3-dev musl-dev linux-headers
 COPY requirements.txt .
-RUN pip3 --target /packages install -r requirements.txt
+RUN pip3 install --target /packages -r requirements.txt
 
 
 FROM python:3.14-alpine3.22
