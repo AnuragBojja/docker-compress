@@ -2,13 +2,13 @@ FROM python:3.14-alpine3.22 AS build
 WORKDIR /opt/server
 RUN apk add --no-cache gcc python3-dev musl-dev linux-headers
 COPY requirements.txt .
-RUN pip3 --target /requirements install -r requirements.txt
+RUN pip3 --target /packages install -r requirements.txt
 
 
 FROM python:3.14-alpine3.22
 EXPOSE 8080
 WORKDIR /opt/server
-COPY --from=build /requirements /usr/local/
+COPY --from=build /packages /usr/local/
 ENV CART_HOST=cart \
     CART_PORT=8080 \
     USER_HOST=user \
